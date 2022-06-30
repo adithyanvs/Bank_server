@@ -15,7 +15,8 @@ const app = express()
 
 //cors use in server app
 app.use(cors({
-    origin:'http://localhost:4200/'
+    origin:'http://localhost:4200',
+    credentials:true
 }))
 
 //parse JSON data
@@ -69,7 +70,7 @@ app.post('/register', (req, res) => {
 //Login API creation
 app.post('/login', (req, res) => {
     //Login solving here....>
-    dataService.login(req.body.acno, req.body.password,)
+    dataService.login(req.body.acno, req.body.pswd,)
     .then(result => {
         res.status(result.statusCode).json(result)
     })
