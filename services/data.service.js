@@ -133,7 +133,7 @@ const login = (acno, pswd) => {
 
 //deposit
 
-const deposit = (acno, password, amt) => {
+const deposit = (req,acno, password, amt) => {
   var amount = parseInt(amt)
   return db.User.findOne({
     acno, password
@@ -141,6 +141,13 @@ const deposit = (acno, password, amt) => {
 
 
     if (user) {
+      if(acno != req.currentAcno){
+        return {
+          status:false,
+          message:"permission Denied",
+          statusCode:401
+        }
+      }
       user.balance += amount
       user.transaction.push({
         type: "CREDIT",
@@ -192,12 +199,19 @@ const deposit = (acno, password, amt) => {
 }
 
 //withdraw
-const withdraw = (acno, password, amt) => {
+const withdraw = (req,acno, password, amt) => {
   var amount = parseInt(amt)
   return db.User.findOne({
     acno, password
   }).then(user => {
     if (user) {
+      if(acno != req.currentAcno){
+        return {
+          status:false,
+          message:"permission Denied",
+          statusCode:401
+        }
+      }
       if (user.balance > amount) {
         user.balance -= amount
         user.transaction.push({

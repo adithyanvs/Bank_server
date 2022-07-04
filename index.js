@@ -40,6 +40,7 @@ const jwtMiddleware = (req, res, next) => {
         //verfy token
         const data = jwt.verify(token, 'supersecretkey12345')
         console.log(data);
+        req.currentAcno = data.currentAcno
         next()
     }
     catch {
@@ -79,7 +80,7 @@ app.post('/login', (req, res) => {
 //deposit API creation
 app.post('/deposit', jwtMiddleware, (req, res) => {
     //Login solving here....>
-    dataService.deposit(req.body.acno, req.body.password, req.body.amt)
+    dataService.deposit(req,req.body.acno, req.body.password, req.body.amt)
     .then(result => {
         res.status(result.statusCode).json(result)
     })
@@ -88,7 +89,7 @@ app.post('/deposit', jwtMiddleware, (req, res) => {
 //withdraw API
 app.post('/withdraw', jwtMiddleware, (req, res) => {
     //Login solving here....>
-    dataService.withdraw(req.body.acno, req.body.password, req.body.amt)
+    dataService.withdraw(req,req.body.acno, req.body.password, req.body.amt)
     .then(result => {
         res.status(result.statusCode).json(result)
     })
