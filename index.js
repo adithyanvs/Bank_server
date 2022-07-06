@@ -104,6 +104,14 @@ app.post('/transaction', jwtMiddleware, (req, res) => {
     })
     
 })
+//delete acc API
+app.delete('/deleteAcc/:acno',jwtMiddleware,(req,res) =>{
+    //delete solving
+    dataService.deleteAcc(req.params.acno)
+    .then(result =>{
+        res.status(result.statusCode).json(result)
+    })
+})
 
 
 

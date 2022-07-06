@@ -133,7 +133,7 @@ const login = (acno, pswd) => {
 
 //deposit
 
-const deposit = (req,acno, password, amt) => {
+const deposit = (req, acno, password, amt) => {
   var amount = parseInt(amt)
   return db.User.findOne({
     acno, password
@@ -141,11 +141,11 @@ const deposit = (req,acno, password, amt) => {
 
 
     if (user) {
-      if(acno != req.currentAcno){
+      if (acno != req.currentAcno) {
         return {
-          status:false,
-          message:"permission Denied",
-          statusCode:401
+          status: false,
+          message: "permission Denied",
+          statusCode: 401
         }
       }
       user.balance += amount
@@ -199,17 +199,17 @@ const deposit = (req,acno, password, amt) => {
 }
 
 //withdraw
-const withdraw = (req,acno, password, amt) => {
+const withdraw = (req, acno, password, amt) => {
   var amount = parseInt(amt)
   return db.User.findOne({
     acno, password
   }).then(user => {
     if (user) {
-      if(acno != req.currentAcno){
+      if (acno != req.currentAcno) {
         return {
-          status:false,
-          message:"permission Denied",
-          statusCode:401
+          status: false,
+          message: "permission Denied",
+          statusCode: 401
         }
       }
       if (user.balance > amount) {
@@ -243,7 +243,7 @@ const withdraw = (req,acno, password, amt) => {
       }
     }
   })
-  }
+}
 
 // if (acno in db) {
 //   if (password == db[acno]["password"]) {
@@ -288,13 +288,13 @@ const getTrasaction = (acno) => {
   return db.User.findOne({
     acno
   }).then(user => {
-    if(user){
+    if (user) {
       return {
         staus: true,
         statusCode: 200,
         transaction: user.transaction
       }
-    }else{
+    } else {
       return {
         status: false,
         message: "user does not exist!!",
@@ -316,8 +316,29 @@ const getTrasaction = (acno) => {
   //     statusCode: 401
   //   }
   // }
-
 }
+
+//delete-------->
+const deleteAcc = (acno) => {
+  return db.User.deleteOne({
+    acno
+  }).then(user => {
+    if (!user) {
+      return {
+        staus: false,
+        message: "operation failed !!!",
+        statusCode: 401
+      }
+    }
+
+    return {
+      status: true,
+      statusCode: 200,
+      message: "Sccessfully Deleted"
+    }
+  })
+}
+
 
 //export
 
@@ -326,5 +347,6 @@ module.exports = {
   login,
   deposit,
   withdraw,
-  getTrasaction
+  getTrasaction,
+  deleteAcc
 }
